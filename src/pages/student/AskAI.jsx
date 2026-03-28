@@ -33,7 +33,8 @@ export default function AskAI() {
       initial="hidden"
       animate="visible"
       exit="exit"
-      className="relative min-h-[calc(100vh-140px)] flex flex-col p-2 max-w-4xl mx-auto w-full"
+      /* PERBAIKAN MOBILE: min-h menyesuaikan Navbar, p-2 agar rapi di HP */
+      className="relative min-h-[calc(100vh-140px)] flex flex-col p-2 max-w-4xl mx-auto w-full font-sans"
     >
       {/* 1. FUTURISTIC BACKGROUND AURA (Always Active) */}
       <div className="absolute inset-0 z-[-1] overflow-hidden rounded-ios-lg pointer-events-none">
@@ -50,25 +51,26 @@ export default function AskAI() {
       </div>
 
       {/* 2. MAIN CONTAINER - Glassmorphism intens */}
-      <motion.div layout className="glass-deep flex-1 rounded-ios-lg border border-white/30 shadow-2xl flex flex-col overflow-hidden items-center justify-center">
+      <motion.div layout className="glass-deep flex-1 rounded-ios-lg border border-white/30 shadow-2xl flex flex-col overflow-hidden items-center justify-center relative">
         
         {/* Header (Minimalis dengan Tombol Back) */}
-        <div className="absolute top-0 left-0 right-0 px-6 py-4 flex items-center gap-4 z-20 bg-white/30 backdrop-blur-md border-b border-gray-100/50">
+        {/* PERBAIKAN MOBILE: padding dikurangi, z-index dipastikan */}
+        <div className="absolute top-0 left-0 right-0 px-4 py-3 flex items-center gap-3 z-30 bg-white/40 backdrop-blur-md border-b border-gray-100/50">
           <motion.button 
             whileHover={{ scale: 1.1, x: -2 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => navigate("/")} // Kembali ke Dashboard
-            className="p-2 -ml-2 rounded-full bg-white/50 text-gray-700 hover:text-ios-blue hover:bg-white shadow-sm transition-all cursor-pointer"
+            className="p-1.5 rounded-full bg-white/70 text-gray-700 hover:text-ios-blue hover:bg-white shadow-sm transition-all cursor-pointer"
             title="Kembali ke Dashboard"
           >
-            <ChevronLeft size={24} />
+            <ChevronLeft size={20} />
           </motion.button>
           
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-2xl bg-gradient-to-br from-ai-cyan via-ai-indigo to-ai-amber drop-shadow-ai-intense">
-              <BrainCircuit size={20} className="text-white" />
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 rounded-xl bg-gradient-to-br from-ai-cyan via-ai-indigo to-ai-amber drop-shadow-ai-intense">
+              <BrainCircuit size={16} className="text-white" />
             </div>
-            <h2 className="text-xl font-bold tracking-tight text-gray-900">Tanya Class Hub AI</h2>
+            <h2 className="text-lg font-bold tracking-tight text-gray-900">Tanya Class Hub AI</h2>
           </div>
         </div>
 
@@ -81,33 +83,35 @@ export default function AskAI() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0, y: -20, transition: { duration: 0.3 } }}
-              className="flex flex-col items-center justify-center p-12 text-center"
+              /* PERBAIKAN MOBILE: padding p-8 agar rapi di HP */
+              className="flex flex-col items-center justify-center p-8 text-center origin-center"
             >
-              <div className="relative mb-10">
+              <div className="relative mb-8 flex items-center justify-center">
                 {/* Lingkaran Orbit/Sirkuit */}
                 <motion.div 
                   animate={{ rotate: 360 }}
                   transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                  className="w-48 h-48 rounded-full border-4 border-dashed border-ai-indigo/40 opacity-50 z-0"
+                  /* PERBAIKAN MOBILE: w-40 h-40 mengecil sedikit */
+                  className="w-40 h-40 rounded-full border-4 border-dashed border-ai-indigo/40 opacity-50 z-0"
                 />
                 
                 {/* Lingkaran Orbit Kedua (Berlawanan Arah) */}
                 <motion.div 
                   animate={{ rotate: -360 }}
                   transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                  className="absolute inset-0 w-48 h-48 rounded-full border-2 border-dashed border-ai-cyan/30 opacity-40 z-0"
+                  /* PERBAIKAN MOBILE: w-40 h-40 mengecil sedikit */
+                  className="absolute w-40 h-40 rounded-full border-2 border-dashed border-ai-cyan/30 opacity-40 z-0"
                 />
 
                 {/* Ikon Otak Tengah (Inisialisasi) */}
                 <motion.div
-                  animate={{
-                    scale: [1, 1.15, 1],
-                  }}
+                  animate={{ scale: [1, 1.15, 1] }}
                   transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
                   className="absolute inset-0 flex items-center justify-center z-10"
                 >
-                  <div className="p-7 rounded-[2rem] bg-gradient-to-br from-ai-cyan via-ai-indigo to-ai-amber drop-shadow-ai-intense">
-                    <Brain size={60} className="text-white" />
+                  {/* PERBAIKAN MOBILE: padding p-6, Brain size 50 mengecil sedikit */ }
+                  <div className="p-6 rounded-[1.75rem] bg-gradient-to-br from-ai-cyan via-ai-indigo to-ai-amber drop-shadow-ai-intense">
+                    <Brain size={50} className="text-white" />
                   </div>
                 </motion.div>
                 
@@ -116,15 +120,15 @@ export default function AskAI() {
                   <motion.div 
                     key={i}
                     animate={{
-                      y: [0, -20, 20, 0],
-                      x: [0, 20, -20, 0],
+                      y: [0, -15, 15, 0], // Jarak vertikal diperkecil
+                      x: [0, 15, -15, 0], // Jarak horizontal diperkecil
                       opacity: [0, 0.8, 0],
                     }}
                     transition={{ duration: 3, delay: i * 0.4, repeat: Infinity }}
-                    className={`absolute w-3 h-3 rounded-full ${i % 2 === 0 ? "bg-ai-cyan" : "bg-ai-amber"} blur-[2px]`}
+                    className={`absolute w-2.5 h-2.5 rounded-full ${i % 2 === 0 ? "bg-ai-cyan" : "bg-ai-amber"} blur-[2px]`}
                     style={{ 
-                      top: `${10 + Math.random() * 80}%`, 
-                      left: `${10 + Math.random() * 80}%` 
+                      top: `${20 + Math.random() * 60}%`, // Sebaran dipersempit
+                      left: `${20 + Math.random() * 60}%` 
                     }}
                   />
                 ))}
@@ -134,72 +138,78 @@ export default function AskAI() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
-                className="text-2xl font-bold tracking-tight mb-2 text-gray-900"
+                /* PERBAIKAN MOBILE: text-xl, gap-2 dikurangi */
+                className="text-xl font-bold tracking-tight mb-2 text-gray-900 flex flex-col items-center gap-1"
               >
-                Tanya Class Hub AI <span className="font-medium text-gray-500"> sedang bersiap...</span>
+                Tanya Class Hub AI <span className="font-medium text-sm text-gray-500"> sedang bersiap...</span>
               </motion.h3 >
               
-              <div className="flex items-center gap-3 p-4 bg-gray-100 rounded-2xl text-sm font-medium text-gray-600">
-                <Loader2 className="animate-spin text-ios-blue" size={18} />
+              {/* PERBAIKAN MOBILE: p-3, text-xs dikurangi */ }
+              <div className="flex items-center gap-2.5 p-3 bg-gray-100 rounded-2xl text-xs font-medium text-gray-600">
+                <Loader2 className="animate-spin text-ios-blue shrink-0" size={16} />
                 <p>Menginisialisasi inti neural network asisten kuliah R2F.</p>
               </div>
             </motion.div>
 
           ) : (
-            /* --- STATE 2: COMING SOON SPLASH SCREEN (Desain Unik & Menyenangkan) --- */
+            /* --- STATE 2: COMING SOON SPLASH SCREEN (Optimasi Mobile) --- */
             <motion.div
               key="coming-soon"
               initial={{ opacity: 0, scale: 0.9, y: 30 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className="flex-1 w-full flex flex-col items-center justify-center p-10 text-center space-y-8 z-10"
+              /* PERBAIKAN MOBILE: p-6, pt-20 agar tidak tertutup header */
+              className="flex-1 w-full flex flex-col items-center justify-center p-6 pt-20 text-center space-y-6 z-10 origin-bottom"
             >
               
-              {/* Desain Komposisi Ikon yang Unik (Robot & Neural Link) */}
-              <div className="relative group p-10 bg-white rounded-r-ios-lg rounded-l-md shadow-lg border border-gray-100/50">
+              {/* Desain Komposisi Ikon (Diubah jadi vertical/stacked di HP) */}
+              {/* PERBAIKAN MOBILE: p-6, flex-col items-center */ }
+              <div className="relative group p-6 bg-white rounded-r-ios-lg rounded-l-md shadow-lg border border-gray-100/50 flex flex-col items-center w-full max-w-sm">
                 {/* Pita Penjilid Buku AI */}
-                <div className="absolute left-0 top-0 bottom-0 w-3.5 bg-gradient-to-b from-ai-cyan via-ai-indigo to-ai-amber shadow-[inset_-2px_0_4px_rgba(0,0,0,0.2)] z-10" />
+                <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-b from-ai-cyan via-ai-indigo to-ai-amber shadow-[inset_-2px_0_3px_rgba(0,0,0,0.15)] z-10" />
                 
                 <motion.div
-                  animate={{
-                    rotate: [0, 5, -5, 0],
-                  }}
+                  animate={{ rotate: [0, 5, -5, 0] }}
                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute -top-12 -left-12 p-5 rounded-full bg-ai-indigo drop-shadow-ai-intense text-white z-20 border-4 border-white shadow-2xl"
+                  /* PERBAIKAN MOBILE: Posisi disesuaikan jadi center-top, p-4, Bot size 40 */
+                  className="absolute -top-10 left-1/2 -translate-x-1/2 p-4 rounded-full bg-ai-indigo drop-shadow-ai-intense text-white z-20 border-4 border-white shadow-2xl"
                 >
-                  <BotMessageSquare size={48} />
+                  <BotMessageSquare size={40} />
                 </motion.div>
 
-                <div className="pl-6 space-y-4">
-                  <div className="p-3 bg-gray-100 rounded-xl w-fit mx-auto text-ai-amber">
-                    <Sparkles size={32} />
+                {/* PERBAIKAN MOBILE: space-y-3, text-center */ }
+                <div className="pt-8 space-y-3 text-center">
+                  <div className="p-2.5 bg-gray-100 rounded-xl w-fit mx-auto text-ai-amber">
+                    <Sparkles size={28} />
                   </div>
-                  <h3 className="text-xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-ai-indigo to-ai-amber">
+                  <h3 className="text-lg font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-ai-indigo to-ai-amber leading-tight">
                     Asisten Kuliah Kelas R2F
                   </h3>
-                  <p className="text-sm font-semibold text-gray-500 max-w-sm">Meringkas materi, menjawab tugas, dan mengelola jadwal perkuliahanmu dengan cerdas.</p>
+                  <p className="text-xs font-semibold text-gray-500 max-w-xs leading-relaxed">Meringkas materi, menjawab tugas, dan mengelola jadwal perkuliahanmu dengan cerdas.</p>
                 </div>
               </div>
 
               {/* Pesan Utama */}
-              <div className="space-y-3">
-                <h1 className="text-4xl font-extrabold tracking-tighter text-gray-900 leading-tight">
+              {/* PERBAIKAN MOBILE: space-y-2.5, text-3xl dikurangi */ }
+              <div className="space-y-2.5">
+                <h1 className="text-3xl font-extrabold tracking-tighter text-gray-900 leading-snug">
                   Inti Neural Network <span className="font-light text-gray-600">sedang dalam proses <span className="text-transparent bg-clip-text bg-gradient-to-r from-ai-indigo to-ai-amber">pembelajaran</span>.</span>
                 </h1>
-                <p className="text-lg font-medium text-gray-600 max-w-2xl mx-auto leading-relaxed">
-                  Fitur Tanya AI ini masih dalam tahap pengembangan intensif untuk memastikan kamu mendapatkan asisten kuliah terbaik yang akurat, aman, dan dapat diandalkan. Ditunggu *update* selanjutnya, ya!
+                <p className="text-base font-medium text-gray-600 max-w-2xl mx-auto leading-relaxed">
+                  Fitur Tanya AI ini masih dalam tahap pengembangan intensif untuk memastikan kamu mendapatkan asisten terbaik yang akurat, aman, dan dapat diandalkan. Ditunggu *update* selanjutnya, ya! 🚀
                 </p>
               </div>
 
               {/* Tombol Back to Dashboard */}
+              {/* PERBAIKAN MOBILE: w-full agar tombol penuh di HP */ }
               <Link to="/" className="w-full md:w-auto">
                 <motion.button 
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="w-full px-12 py-5 bg-ios-blue text-white rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-3 cursor-pointer"
+                  className="w-full px-10 py-4 bg-ios-blue text-white rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-3 cursor-pointer"
                 >
-                  <ChevronLeft size={20} />
+                  <ChevronLeft size={18} strokeWidth={2.5}/>
                   Daftar di Dashboard
                 </motion.button>
               </Link>

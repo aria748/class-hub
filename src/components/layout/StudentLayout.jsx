@@ -1,66 +1,111 @@
-import { Outlet, Link, useLocation } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import { LayoutDashboard, CalendarDays, BookOpenText, Bell, Users, BrainCircuit, UsersRound } from "lucide-react";
+import { Outlet, NavLink, useLocation } from "react-router-dom";
+import { LayoutDashboard, CalendarDays, BookOpenText, Bell, Users, UsersRound } from "lucide-react";
+import { motion } from "framer-motion";
 
 const navItems = [
   { name: "Dashboard", path: "/", icon: LayoutDashboard },
   { name: "Jadwal", path: "/schedule", icon: CalendarDays },
   { name: "Materi", path: "/materials", icon: BookOpenText },
   { name: "Tugas", path: "/tasks", icon: Bell },
-  { name: "Teman", path: "/students", icon: Users },
   { name: "Kelompok", path: "/groups", icon: UsersRound },
+  { name: "Teman", path: "/students", icon: Users },
 ];
 
-const StudentLayout = () => {
+export default function StudentLayout() {
   const location = useLocation();
 
   return (
-    <div className="min-h-screen bg-ios-bg text-[#1d1d1f]">
-      {/* Glassmorphism Navbar */}
-      <nav className="glass fixed top-0 left-0 right-0 z-50 rounded-b-ios border-none m-2 mt-0">
-        <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-ios-blue flex items-center justify-center text-white font-bold">R</div>
-            <span className="text-xl font-bold tracking-tight">Class Hub <span className="text-ios-blue">R2F</span></span>
+    <div className="min-h-screen bg-gray-50/50 pb-24 md:pb-0 font-sans">
+      
+      {/* =========================================
+          DESKTOP NAVBAR (Hanya tampil di Laptop/Tablet)
+          ========================================= */}
+      <nav className="hidden md:flex sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-gray-100 px-8 py-4 justify-between items-center shadow-sm">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-gradient-to-br from-ios-blue to-blue-600 rounded-xl flex items-center justify-center shadow-md">
+            <span className="text-white font-bold text-xl">R</span>
           </div>
-          
-          <div className="flex items-center gap-1 bg-gray-200/50 rounded-full p-1 relative">
-            {navItems.map((item) => {
-              const isActive = location.pathname === item.path;
-              return (
-                <Link key={item.path} to={item.path} className="relative px-4 py-2 flex items-center gap-2 rounded-full text-sm font-medium z-10 transition-colors duration-300">
-                  <item.icon className={`w-4 h-4 ${isActive ? 'text-ios-blue' : 'text-gray-600'}`} />
-                  <span className={isActive ? 'text-ios-blue' : 'text-gray-700'}>{item.name}</span>
-                  
-                  {/* Animasi Pil Latar Belakang (iOS style) */}
-                  {isActive && (
-                    <motion.div
-                      layoutId="navPill"
-                      className="absolute inset-0 bg-white rounded-full shadow-sm z-[-1]"
-                      transition={{ type: "spring", stiffness: 350, damping: 30 }}
-                    />
-                  )}
-                </Link>
-              );
-            })}
-            
-          </div>
+          <h1 className="text-xl font-extrabold text-gray-900 tracking-tight">Class Hub</h1>
+        </div>
 
-          {/* <div className="flex items-center gap-3">
-            <span className="text-sm">Aria Putra</span>
-            <img src="https://api.dicebear.com/8.x/notionists/svg?seed=Aria" alt="avatar" className="w-10 h-10 rounded-full bg-white border border-gray-200" />
-          </div> */}
+        <div className="flex items-center gap-2">
+          {navItems.map((item) => {
+            const isActive = location.pathname === item.path;
+            return (
+              <NavLink
+                key={item.name}
+                to={item.path}
+                className={`relative px-4 py-2.5 rounded-full text-sm font-bold transition-all duration-300 flex items-center gap-2 ${
+                  isActive ? "text-ios-blue bg-blue-50" : "text-gray-500 hover:text-gray-900 hover:bg-gray-100"
+                }`}
+              >
+                <item.icon size={18} />
+                {item.name}
+                {isActive && (
+                  <motion.div
+                    layoutId="desktopNavIndicator"
+                    className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-1 bg-ios-blue rounded-t-full"
+                  />
+                )}
+              </NavLink>
+            );
+          })}
         </div>
       </nav>
 
-      {/* Main Content Area dengan AnimatePresence untuk transisi halaman */}
-      <main className="pt-28 pb-10 px-6 max-w-7xl mx-auto">
-        <AnimatePresence mode="wait">
-          <Outlet key={location.pathname} />
-        </AnimatePresence>
+      {/* =========================================
+          MOBILE HEADER (Hanya tampil di HP)
+          ========================================= */}
+      <header className="md:hidden sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-gray-100 px-5 py-4 flex justify-between items-center">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 bg-gradient-to-br from-ios-blue to-blue-600 rounded-lg flex items-center justify-center shadow-sm">
+            <span className="text-white font-bold text-lg">R</span>
+          </div>
+          <h1 className="text-lg font-extrabold text-gray-900 tracking-tight">Class Hub</h1>
+        </div>
+      </header>
+
+      {/* =========================================
+          KONTEN UTAMA
+          ========================================= */}
+      <main className="max-w-7xl mx-auto p-4 md:p-8">
+        <Outlet />
       </main>
+
+      {/* =========================================
+          MOBILE BOTTOM NAVIGATION (Hanya tampil di HP)
+          ========================================= */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-xl border-t border-gray-200 z-50 pb-safe">
+        {/* Tambahkan overflow-x-auto agar menu bisa digeser kalau layarnya kekecilan */}
+        <div className="flex items-center px-2 py-2 overflow-x-auto scrollbar-hide gap-1">
+          {navItems.map((item) => {
+            const isActive = location.pathname === item.path;
+            return (
+              <NavLink
+                key={item.name}
+                to={item.path}
+                className={`relative flex flex-col items-center justify-center w-16 min-w-[64px] py-2 rounded-2xl transition-all duration-300 ${
+                  isActive ? "text-ios-blue" : "text-gray-400 hover:text-gray-600"
+                }`}
+              >
+                <div className={`p-1.5 rounded-xl transition-all duration-300 ${isActive ? "bg-blue-50/80 scale-110" : "scale-100"}`}>
+                  <item.icon size={22} strokeWidth={isActive ? 2.5 : 2} />
+                </div>
+                <span className={`text-[10px] mt-1 transition-all duration-300 ${isActive ? "font-bold" : "font-medium"}`}>
+                  {item.name}
+                </span>
+                {isActive && (
+                  <motion.div
+                    layoutId="mobileNavIndicator"
+                    className="absolute -top-2 w-8 h-1 bg-ios-blue rounded-b-full"
+                  />
+                )}
+              </NavLink>
+            );
+          })}
+        </div>
+      </nav>
+
     </div>
   );
-};
-
-export default StudentLayout;
+}

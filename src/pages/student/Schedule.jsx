@@ -68,12 +68,14 @@ export default function Schedule() {
       </div>
 
       {/* iOS Style Segmented Control (Tabs) */}
-      <div className="flex p-1 bg-gray-200/60 rounded-full mx-auto w-full md:w-fit relative glass">
+      {/* 1. Tambahkan overflow-x-auto dan scrollbar-hide di div pembungkus */}
+      <div className="flex p-1 bg-gray-200/60 rounded-full mx-auto w-full md:w-fit relative glass overflow-x-auto scrollbar-hide">
         {days.map((day) => (
           <button
             key={day}
             onClick={() => setActiveDay(day)}
-            className={`relative flex-1 md:flex-none px-6 py-3 rounded-full text-sm font-semibold transition-colors z-10 cursor-pointer ${
+            /* 2. Tambahkan shrink-0 dan whitespace-nowrap di tombol */
+            className={`relative shrink-0 whitespace-nowrap flex-1 md:flex-none px-6 py-3 rounded-full text-sm font-semibold transition-colors z-10 cursor-pointer ${
               activeDay === day ? "text-ios-blue" : "text-gray-600 hover:text-gray-900"
             }`}
           >
