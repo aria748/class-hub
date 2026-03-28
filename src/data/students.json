@@ -1,0 +1,38 @@
+[
+  {
+    "id": "std1",
+    "name": "Aria Putra",
+    "npm": "202401001",
+    "phone": "081234567890"
+  },
+  {
+    "id": "std2",
+    "name": "Bima Sena Pratama",
+    "npm": "202401002",
+    "phone": "081298765432"
+  },
+  {
+    "id": "std3",
+    "name": "Citra Lestari",
+    "npm": "202401003",
+    "phone": "081211223344"
+  },
+  {
+    "id": "std4",
+    "name": "Dimas Anggara",
+    "npm": "202401004",
+    "phone": "081255667788"
+  },
+  {
+    "id": "std5",
+    "name": "Erika Putri",
+    "npm": "202401005",
+    "phone": "081299887766"
+  },
+  {
+    "id": "std6",
+    "name": "Fajar Nugraha",
+    "npm": "202401006",
+    "phone": "081244332211"
+  }
+]

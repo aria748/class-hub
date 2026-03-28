@@ -1,0 +1,59 @@
+{
+  "Senin": [
+    {
+      "id": "sn1",
+      "time": "08:00 - 10:30",
+      "subject": "Pengantar Desain Komunikasi Visual",
+      "lecturer": "Pak Budi Santoso",
+      "room": "Lab Multimedia 1",
+      "type": "Praktek"
+    },
+    {
+      "id": "sn2",
+      "time": "11:00 - 13:30",
+      "subject": "Penulisan Naskah & Storytelling",
+      "lecturer": "Ibu Sari Ningsih",
+      "room": "Ruang Teori 204",
+      "type": "Teori"
+    }
+  ],
+  "Selasa": [
+    {
+      "id": "sl1",
+      "time": "09:00 - 12:00",
+      "subject": "Dasar Game Development",
+      "lecturer": "Pak Antonius",
+      "room": "Lab Komputer 3",
+      "type": "Praktek"
+    },
+    {
+      "id": "sl2",
+      "time": "13:00 - 15:30",
+      "subject": "Videografi & Produksi Film Pendek",
+      "lecturer": "Mas Dimas",
+      "room": "Studio Audio Visual",
+      "type": "Praktek"
+    }
+  ],
+  "Rabu": [
+    {
+      "id": "rb1",
+      "time": "08:00 - 10:30",
+      "subject": "Kecerdasan Buatan (AI)",
+      "lecturer": "Ibu Diana",
+      "room": "Ruang Teori 301",
+      "type": "Teori"
+    }
+  ],
+  "Kamis": [
+    {
+      "id": "km1",
+      "time": "10:00 - 12:30",
+      "subject": "Manajemen Proyek Kreatif",
+      "lecturer": "Pak Hendra",
+      "room": "Ruang Teori 205",
+      "type": "Teori"
+    }
+  ],
+  "Jumat": []
+}

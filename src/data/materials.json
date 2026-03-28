@@ -1,0 +1,56 @@
+[
+  {
+    "id": "m1",
+    "title": "Modul 1: Pengantar Desain Komunikasi Visual",
+    "subject": "DKV",
+    "type": "pdf",
+    "size": "2.4 MB",
+    "date": "24 Mar 2026",
+    "uploader": "Pak Budi"
+  },
+  {
+    "id": "m2",
+    "title": "Struktur Tiga Babak dalam Skenario",
+    "subject": "Storytelling",
+    "type": "doc",
+    "size": "1.1 MB",
+    "date": "22 Mar 2026",
+    "uploader": "Ibu Sari"
+  },
+  {
+    "id": "m3",
+    "title": "Asset Management & UI Flow",
+    "subject": "Game Dev",
+    "type": "zip",
+    "size": "15 MB",
+    "date": "20 Mar 2026",
+    "uploader": "Pak Antonius"
+  },
+  {
+    "id": "m4",
+    "title": "Referensi Color Palette iOS",
+    "subject": "DKV",
+    "type": "image",
+    "size": "5.2 MB",
+    "date": "18 Mar 2026",
+    "uploader": "Pak Budi"
+  },
+  {
+    "id": "m5",
+    "title": "Video Tutorial Tata Cahaya (Lighting)",
+    "subject": "Videografi",
+    "type": "video",
+    "size": "124 MB",
+    "date": "15 Mar 2026",
+    "uploader": "Mas Dimas"
+  },
+  {
+    "id": "m6",
+    "title": "Character Arc & Pengembangan Konflik",
+    "subject": "Storytelling",
+    "type": "pdf",
+    "size": "3.8 MB",
+    "date": "10 Mar 2026",
+    "uploader": "Ibu Sari"
+  }
+]

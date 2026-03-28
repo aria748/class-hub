@@ -1,0 +1,43 @@
+[
+  {
+    "id": "t1",
+    "title": "Skenario & Shot List Film Pendek",
+    "subject": "Videografi",
+    "deadline": "2026-03-27T23:59:00",
+    "status": "aktif",
+    "priority": "tinggi",
+    "description": "Buatlah draft skenario final untuk project film pendek kelompok, lengkap dengan breakdown shot list (angle, pergerakan kamera, dan durasi estimasi per shot). Kumpulkan dalam format PDF.",
+    "lecturer": "Mas Dimas"
+  },
+  {
+    "id": "t2",
+    "title": "Prototype Mekanik Game & UI/UX",
+    "subject": "Game Development",
+    "deadline": "2026-03-30T15:00:00",
+    "status": "aktif",
+    "priority": "sedang",
+    "description": "Kembangkan prototype interaktif dari game web yang sedang dibuat. Pastikan menu interaksi karakter utama sudah bisa di-klik dan state UI berubah sesuai kondisi karakter.",
+    "lecturer": "Pak Antonius"
+  },
+  {
+    "id": "t3",
+    "title": "Desain Aset Visual & Tipografi",
+    "subject": "DKV",
+    "deadline": "2026-04-02T12:00:00",
+    "status": "aktif",
+    "priority": "rendah",
+    "description": "Kumpulkan aset visual (vektor/bitmap) dan panduan tipografi yang akan digunakan untuk materi ajar siswa SMK. Pastikan warna konsisten dengan palet yang sudah disetujui.",
+    "lecturer": "Pak Budi Santoso"
+  },
+  {
+    "id": "t4",
+    "title": "Struktur Tiga Babak Cerita Pendek",
+    "subject": "Storytelling",
+    "deadline": "2026-03-20T23:59:00",
+    "status": "selesai",
+    "priority": "sedang",
+    "description": "Kumpulkan outline cerita pendek kalian menggunakan metode struktur tiga babak (Setup, Confrontation, Resolution).",
+    "lecturer": "Ibu Sari Ningsih",
+    "score": "95/100"
+  }
+]
