@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Users, Dices, UserCheck, Loader2, Shuffle, Settings2, UserRound, UserRoundPlus, BookOpen, StickyNote, AlertCircle, ChevronLeft, Library } from "lucide-react";
+import { Users, Dices, UserCheck, Loader2, Shuffle, Settings2, BookOpen, StickyNote, AlertCircle, ChevronLeft, Library } from "lucide-react";
 import { useGoogleSheets } from "../../hooks/useGoogleSheets";
 import { AnimatedCard } from "../../components/ui/AnimatedCard";
 
@@ -12,21 +12,18 @@ const GROUPS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSiXsG8U
 
 export default function Groups() {
   const [activeTab, setActiveTab] = useState("daftar");
-  const [selectedSubject, setSelectedSubject] = useState(null); // State untuk melacak buku/matkul yang dibuka
+  const [selectedSubject, setSelectedSubject] = useState(null);
   const [isSpinning, setIsSpinning] = useState(false);
   const [spunResults, setSpunResults] = useState(null);
 
-  // State Pengaturan Spin
+  // State Pengaturan Spin (Lebih Sederhana & Efektif)
   const [spinMode, setSpinMode] = useState("normal");
-  const [numGroups, setNumGroups] = useState(2);
-  const [countBoy, setCountBoy] = useState(3);
-  const [countGirl, setCountGirl] = useState(3);
+  const [numGroups, setNumGroups] = useState(4); // Default 4 Kelompok
 
   // Fetch Data dari Google Sheets
   const { data: studentsData, loading: studentsLoading } = useGoogleSheets(STUDENTS_CSV_URL);
   const { data: groupsData, loading: groupsLoading, error: groupsError } = useGoogleSheets(GROUPS_CSV_URL);
 
-  // Mengelompokkan data dari Google Sheets berdasarkan Mata Kuliah
   const groupedGroups = (groupsData || []).reduce((acc, group) => {
     const subj = group.subject || "Mata Kuliah Umum";
     if (!acc[subj]) acc[subj] = [];
@@ -36,40 +33,50 @@ export default function Groups() {
 
   const subjects = Object.keys(groupedGroups);
 
-  // Fungsi Logika Spin Kelompok
+  // =========================================
+  // LOGIKA BARU: SPIN KELOMPOK SUPER ADIL
+  // =========================================
   const handleSpin = () => {
     if (!studentsData || studentsData.length === 0) return;
     setIsSpinning(true);
     setSpunResults(null);
 
     setTimeout(() => {
-      let groups = [];
-      const shuffled = [...studentsData].sort(() => 0.5 - Math.random());
+      // Siapkan wadah kelompok kosong sebanyak numGroups
+      let groups = Array.from({ length: numGroups }, () => []);
 
       if (spinMode === "normal") {
-        groups = Array.from({ length: numGroups }, () => []);
+        // MODE 1: Bebas (Acak murni tanpa lihat gender)
+        const shuffled = [...studentsData].sort(() => 0.5 - Math.random());
         shuffled.forEach((student, index) => {
           groups[index % numGroups].push(student);
         });
       } else {
-        const boys = shuffled.filter(s => s.gender?.toLowerCase().includes('l') || s.gender?.toLowerCase().includes('cowok'));
-        const girls = shuffled.filter(s => s.gender?.toLowerCase().includes('p') || s.gender?.toLowerCase().includes('cewek'));
+        // MODE 2: Seimbang Gender (Round-Robin Algorithm)
+        // 1. Pisahkan gender & acak masing-masing
+        const boys = studentsData
+          .filter(s => s.gender?.toLowerCase().includes('l') || s.gender?.toLowerCase().includes('cowok'))
+          .sort(() => 0.5 - Math.random());
+        const girls = studentsData
+          .filter(s => s.gender?.toLowerCase().includes('p') || s.gender?.toLowerCase().includes('cewek'))
+          .sort(() => 0.5 - Math.random());
 
-        let boyIndex = 0;
-        let girlIndex = 0;
+        let currentGroupIndex = 0;
 
-        while (boyIndex < boys.length || girlIndex < girls.length) {
-          const currentGroup = [];
-          for (let i = 0; i < countBoy && boyIndex < boys.length; i++) {
-            currentGroup.push(boys[boyIndex]);
-            boyIndex++;
-          }
-          for (let i = 0; i < countGirl && girlIndex < girls.length; i++) {
-            currentGroup.push(girls[girlIndex]);
-            girlIndex++;
-          }
-          if (currentGroup.length > 0) groups.push(currentGroup);
-        }
+        // 2. Bagikan cowok satu per satu ke tiap kelompok (seperti bagi kartu)
+        boys.forEach(boy => {
+          groups[currentGroupIndex % numGroups].push(boy);
+          currentGroupIndex++;
+        });
+
+        // 3. Lanjutkan membagikan cewek di titik terakhir berhenti agar jumlah anggota adil
+        girls.forEach(girl => {
+          groups[currentGroupIndex % numGroups].push(girl);
+          currentGroupIndex++;
+        });
+        
+        // Terakhir: Acak susunan mahasiswa di dalam tiap kelompok agar cowok/cewek tidak selalu di atas/bawah
+        groups = groups.map(g => g.sort(() => 0.5 - Math.random()));
       }
 
       setSpunResults(groups);
@@ -77,30 +84,14 @@ export default function Groups() {
     }, 1500);
   };
 
-  // Varian Animasi 3D "Open Book" (Membuka Halaman)
   const bookFlipVariants = {
-    hidden: { opacity: 0, scaleX: 0, originX: 0 }, // Menggunakan originX: 0 (poros kiri)
-    visible: { 
-      opacity: 1, 
-      scaleX: 1, 
-      originX: 0, 
-      transition: { duration: 0.4, ease: "easeOut" } 
-    },
-    exit: { 
-      opacity: 0, 
-      scaleX: 0, 
-      originX: 0, 
-      transition: { duration: 0.3, ease: "easeIn" } 
-    }
+    hidden: { opacity: 0, scaleX: 0, originX: 0 },
+    visible: { opacity: 1, scaleX: 1, originX: 0, transition: { duration: 0.4, ease: "easeOut" } },
+    exit: { opacity: 0, scaleX: 0, originX: 0, transition: { duration: 0.3, ease: "easeIn" } }
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      className="max-w-4xl mx-auto space-y-8"
-    >
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="max-w-4xl mx-auto space-y-8">
       <div className="text-center mb-10">
         <h1 className="text-4xl font-extrabold tracking-tighter mb-2">Kelompok Tugas</h1>
         <p className="text-gray-500">Lihat daftar kelompok atau acak anggota baru secara adil.</p>
@@ -116,18 +107,14 @@ export default function Groups() {
             key={tab.id}
             onClick={() => {
               setActiveTab(tab.id);
-              setSelectedSubject(null); // Tutup buku kalau pindah tab
+              setSelectedSubject(null);
             }}
             className={`relative flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-bold transition-colors z-10 cursor-pointer ${
               activeTab === tab.id ? "text-ios-blue" : "text-gray-500 hover:text-gray-800"
             }`}
           >
             {activeTab === tab.id && (
-              <motion.div
-                layoutId="groupTabPill"
-                className="absolute inset-0 bg-white rounded-full shadow-sm z-[-1]"
-                transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
-              />
+              <motion.div layoutId="groupTabPill" className="absolute inset-0 bg-white rounded-full shadow-sm z-[-1]" transition={{ type: "spring", bounce: 0.2, duration: 0.5 }} />
             )}
             <tab.icon size={16} />
             {tab.label}
@@ -137,16 +124,7 @@ export default function Groups() {
 
       <AnimatePresence mode="wait">
         {activeTab === "daftar" ? (
-          /* =========================================
-             TAB 1: DAFTAR KELOMPOK AKTIF
-             ========================================= */
-          <motion.div
-            key="daftar"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 20 }}
-            className="w-full"
-          >
+          <motion.div key="daftar" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="w-full">
             {groupsLoading ? (
                <div className="flex flex-col items-center justify-center py-20 text-ios-blue">
                  <Loader2 className="animate-spin mb-4" size={40} />
@@ -158,21 +136,10 @@ export default function Groups() {
                  <p>Gagal memuat: {groupsError}</p>
                </div>
             ) : subjects.length > 0 ? (
-              
-              /* Container dengan Perspective untuk Efek 3D */
               <div className="w-full">
                 <AnimatePresence mode="wait">
-                  
                   {!selectedSubject ? (
-                    /* --- TAMPILAN 1: RAK BUKU MATA KULIAH (GRID) --- */
-                    <motion.div
-                      key="grid-buku"
-                      variants={bookFlipVariants}
-                      initial="hidden"
-                      animate="visible"
-                      exit="exit"
-                      className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
-                    >
+                    <motion.div key="grid-buku" variants={bookFlipVariants} initial="hidden" animate="visible" exit="exit" className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                       {subjects.map((subject) => (
                         <motion.div
                           key={subject}
@@ -181,9 +148,7 @@ export default function Groups() {
                           onClick={() => setSelectedSubject(subject)}
                           className="relative bg-white rounded-r-2xl rounded-l-md shadow-md hover:shadow-xl hover:shadow-ios-blue/20 cursor-pointer border border-gray-100 overflow-hidden flex flex-col h-40 group transition-all"
                         >
-                          {/* Tulang Buku (Spine) di sisi kiri */}
                           <div className="absolute left-0 top-0 bottom-0 w-3.5 bg-gradient-to-b from-ios-blue to-blue-600 shadow-[inset_-2px_0_4px_rgba(0,0,0,0.2)] z-10" />
-                          
                           <div className="pl-7 p-4 flex-1 flex flex-col justify-center relative">
                             <BookOpen size={24} className="text-ios-blue mb-3 opacity-80 group-hover:scale-110 transition-transform" />
                             <h3 className="font-bold text-gray-800 leading-tight line-clamp-2 text-sm md:text-base">{subject}</h3>
@@ -195,17 +160,7 @@ export default function Groups() {
                       ))}
                     </motion.div>
                   ) : (
-                    
-                    /* --- TAMPILAN 2: HALAMAN DALAM BUKU (DETAIL KELOMPOK) --- */
-                    <motion.div
-                        key="detail-buku"
-                        variants={bookFlipVariants}
-                        initial="hidden"
-                        animate="visible"
-                        exit="exit"
-                        className="w-full bg-white/90 rounded-3xl p-3 md:p-6 border border-gray-100 shadow-xl"
->
-                      {/* Header Buku Terbuka */}
+                    <motion.div key="detail-buku" variants={bookFlipVariants} initial="hidden" animate="visible" exit="exit" className="w-full bg-white/90 rounded-3xl p-3 md:p-6 border border-gray-100 shadow-xl">
                       <div className="flex items-center gap-4 mb-8">
                         <motion.button 
                           whileHover={{ scale: 1.1, x: -2 }}
@@ -221,7 +176,6 @@ export default function Groups() {
                         </div>
                       </div>
 
-                      {/* List Kelompok di Dalam Mata Kuliah Tersebut */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
                         {groupedGroups[selectedSubject].map((group, index) => {
                           const memberList = group.members ? group.members.split(",").map(m => m.trim()) : [];
@@ -264,7 +218,6 @@ export default function Groups() {
                   )}
                 </AnimatePresence>
               </div>
-
             ) : (
               <div className="text-center py-20 text-gray-500 flex flex-col items-center">
                 <Library className="mb-4 text-gray-300" size={56} />
@@ -275,10 +228,9 @@ export default function Groups() {
           </motion.div>
         ) : (
           /* =========================================
-             TAB 2: ALAT SPIN KELOMPOK (TETAP SAMA)
+             TAB 2: ALAT SPIN KELOMPOK
              ========================================= */
           <motion.div key="spin" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-8">
-            {/* Control Panel Spin */}
             <div className="glass p-6 rounded-ios-lg border border-gray-200 shadow-sm max-w-lg mx-auto">
               <h2 className="text-xl font-bold mb-5 flex items-center justify-center gap-2 text-center">
                 <Settings2 className="text-ai-indigo" /> Pengaturan Spin
@@ -287,38 +239,22 @@ export default function Groups() {
               <div className="flex bg-gray-100 rounded-xl p-1 mb-6">
                 <button 
                   onClick={() => setSpinMode("normal")}
-                  className={`flex-1 py-2 text-sm font-bold rounded-lg transition-colors cursor-pointer ${spinMode === "normal" ? "bg-white shadow-sm text-ios-blue" : "text-gray-500"}`}
+                  className={`flex-1 py-2 text-sm font-bold rounded-lg transition-colors cursor-pointer ${spinMode === "normal" ? "bg-white shadow-sm text-ios-blue" : "text-gray-500 hover:text-gray-700"}`}
                 >
-                  Bagi Rata (Acak)
+                  Acak Bebas
                 </button>
                 <button 
                   onClick={() => setSpinMode("gender")}
-                  className={`flex-1 py-2 text-sm font-bold rounded-lg transition-colors cursor-pointer ${spinMode === "gender" ? "bg-white shadow-sm text-ios-blue" : "text-gray-500"}`}
+                  className={`flex-1 py-2 text-sm font-bold rounded-lg transition-colors cursor-pointer ${spinMode === "gender" ? "bg-white shadow-sm text-ios-blue" : "text-gray-500 hover:text-gray-700"}`}
                 >
-                  Kustom Gender
+                  Seimbang Gender
                 </button>
               </div>
 
-              <AnimatePresence mode="wait">
-                {spinMode === "normal" ? (
-                  <motion.div key="normal" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="flex items-center justify-between mb-6 px-2">
-                    <label className="font-medium text-gray-700">Jumlah Kelompok:</label>
-                    <input type="number" min="2" max="15" value={numGroups} onChange={(e) => setNumGroups(Number(e.target.value))} className="w-20 text-center py-2 px-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-ios-blue outline-none font-bold" />
-                  </motion.div>
-                ) : (
-                  <motion.div key="gender" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="space-y-4 mb-6 px-2">
-                    <div className="flex items-center justify-between">
-                      <label className="font-medium text-gray-700 flex items-center gap-2"><UserRound size={16} className="text-blue-500"/> Cowok per Kelompok:</label>
-                      <input type="number" min="0" max="10" value={countBoy} onChange={(e) => setCountBoy(Number(e.target.value))} className="w-20 text-center py-2 px-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-ios-blue outline-none font-bold" />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <label className="font-medium text-gray-700 flex items-center gap-2"><UserRoundPlus size={16} className="text-pink-500"/> Cewek per Kelompok:</label>
-                      <input type="number" min="0" max="10" value={countGirl} onChange={(e) => setCountGirl(Number(e.target.value))} className="w-20 text-center py-2 px-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-ios-blue outline-none font-bold" />
-                    </div>
-                    <p className="text-xs text-gray-500 text-center">*Sisa mahasiswa yang tidak pas kuota otomatis masuk kelompok terakhir.</p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              <div className="flex items-center justify-between mb-8 px-2">
+                <label className="font-medium text-gray-700">Jumlah Kelompok:</label>
+                <input type="number" min="2" max="20" value={numGroups} onChange={(e) => setNumGroups(Number(e.target.value))} className="w-20 text-center py-2 px-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-ios-blue outline-none font-bold" />
+              </div>
 
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -335,11 +271,7 @@ export default function Groups() {
             {/* Hasil Spin */}
             <AnimatePresence>
               {spunResults && !isSpinning && (
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-                >
+                <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {spunResults.map((group, index) => (
                     <motion.div key={index} initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: index * 0.1, type: "spring", stiffness: 300 }}>
                       <AnimatedCard className="border-t-4 border-t-ai-indigo bg-gradient-to-b from-white to-gray-50">
