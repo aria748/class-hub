@@ -11,7 +11,8 @@ import {
   ChevronRight,
   ChevronDown,
   Loader2,
-  CheckCircle2
+  CheckCircle2,
+  BookOpen
 } from "lucide-react";
 import { AnimatedCard } from "../../components/ui/AnimatedCard";
 import { useGoogleSheets } from "../../hooks/useGoogleSheets";
@@ -111,7 +112,7 @@ export default function Dashboard() {
                       <h3 className="font-bold text-gray-900 leading-tight">{item.subject}</h3>
                       <div className="flex items-center gap-3 mt-1 text-sm text-gray-500 font-medium">
                         <span className="flex items-center gap-1"><MapPin size={14} /> {item.room}</span>
-                        <span className="flex items-center gap-1"><Clock size={14} /> {item.type || "Teori"}</span>
+                        <span className="flex items-center gap-1"><BookOpen size={14} /> {item.type || "Teori"}</span>
                       </div>
                     </div>
                   </div>
