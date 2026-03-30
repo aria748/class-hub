@@ -4,7 +4,8 @@ import { Clock, AlertCircle, ChevronDown, UploadCloud, FileText, CheckCircle2, C
 import { useGoogleSheets } from "../../hooks/useGoogleSheets";
 
 // Masukkan Link CSV dari Google Sheets kamu di sini
-const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSiXsG8UrmsmxF8wc6XtB9t8b1frBI9viftOxbOVQSnFHeme4FXmAeqobDR9tHq43JxUwzNFu3bQv92/pub?gid=0&single=true&output=csv";
+const refreshKey = new Date().getTime();
+const SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/e/2PACX-1vSiXsG8UrmsmxF8wc6XtB9t8b1frBI9viftOxbOVQSnFHeme4FXmAeqobDR9tHq43JxUwzNFu3bQv92/pub?gid=1305672077&single=true&output=csv&t=${refreshKey}`;
 
 export default function Tasks() {
   const [activeTab, setActiveTab] = useState("aktif");
@@ -182,7 +183,7 @@ export default function Tasks() {
                             {task.description}
                           </div>
 
-                          {task.status === "aktif" && (
+                          {/* {task.status === "aktif" && (
                             <div className="flex gap-3">
                               <button className="flex-1 bg-ios-blue hover:bg-blue-700 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer">
                                 <UploadCloud size={18} />
@@ -193,7 +194,7 @@ export default function Tasks() {
                                 Lihat Format
                               </button>
                             </div>
-                          )}
+                          )} */}
                         </div>
                       </motion.div>
                     )}

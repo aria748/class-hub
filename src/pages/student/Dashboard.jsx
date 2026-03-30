@@ -19,7 +19,7 @@ import { useGoogleSheets } from "../../hooks/useGoogleSheets";
 
 // GANTI 3 LINK DI BAWAH INI DENGAN LINK CSV MASING-MASING SHEET
 const SCHEDULE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSiXsG8UrmsmxF8wc6XtB9t8b1frBI9viftOxbOVQSnFHeme4FXmAeqobDR9tHq43JxUwzNFu3bQv92/pub?gid=1164980928&single=true&output=csv"; // Sheet Jadwal
-const TASKS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSiXsG8UrmsmxF8wc6XtB9t8b1frBI9viftOxbOVQSnFHeme4FXmAeqobDR9tHq43JxUwzNFu3bQv92/pub?gid=0&single=true&output=csv"; // Sheet Tugas
+const TASKS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSiXsG8UrmsmxF8wc6XtB9t8b1frBI9viftOxbOVQSnFHeme4FXmAeqobDR9tHq43JxUwzNFu3bQv92/pub?gid=1305672077&single=true&output=csv"; // Sheet Tugas
 const INFO_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSiXsG8UrmsmxF8wc6XtB9t8b1frBI9viftOxbOVQSnFHeme4FXmAeqobDR9tHq43JxUwzNFu3bQv92/pub?gid=848340989&single=true&output=csv"; // Sheet Info
 
 export default function Dashboard() {
